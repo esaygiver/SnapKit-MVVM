@@ -52,9 +52,10 @@ class MovieCollectionViewCell: UICollectionViewCell {
     
     func setMovieImage(on url: String?, contentMode: ContentMode = .scaleAspectFit, title: String? = "") {
         movieImageView.contentMode = contentMode
-        url != "https://image.tmdb.org/t/p/w500" ?
-            movieImageView.fetchImage(from: url ?? "") :
-            movieImageView.fetchImage(from: getURL(on: .emptyImage))
+        let emptyURLArray = ["https://image.tmdb.org/t/p/w500", "https://image.tmdb.org/t/p/original"]
+        emptyURLArray.contains(url ?? "") ?
+            movieImageView.fetchImage(from: getURL(on: .emptyImage)) :
+            movieImageView.fetchImage(from: url ?? "")
         titleLabel.text = title
     }
 }

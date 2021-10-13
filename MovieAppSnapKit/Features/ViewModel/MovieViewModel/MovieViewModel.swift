@@ -38,7 +38,7 @@ class MovieViewModel: MoviesViewModelOutput {
             guard let self = self else { return }
             if let personResponse = personResponse {
                 self.changeLoading()
-                self.moviesOutput?.saveSearchedPersons(results: personResponse)
+                self.moviesOutput?.getSearchedPersons(results: personResponse)
             }
         }
     }
@@ -48,7 +48,7 @@ class MovieViewModel: MoviesViewModelOutput {
         moviesService.fetchSearchingMovies(query: query, page: page) { [weak self] (movieResponse) in
             guard let self = self else { return }
             if let movieResponse = movieResponse {
-                self.moviesOutput?.saveSearchedItems(results: movieResponse)
+                self.moviesOutput?.getSearchedMovies(results: movieResponse)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
                     self?.changeLoading()
                 }
@@ -61,7 +61,7 @@ class MovieViewModel: MoviesViewModelOutput {
         moviesService.fetchPopularMovies(page: page) { [weak self] (popularMovieResponse) in
             guard let self = self else { return }
             if let popularMovies = popularMovieResponse, !(popularMovies.movie?.isEmpty ?? true) {
-                self.moviesOutput?.savePopularMovies(results: MovieInteraptor().fetchFavoriteds(on: popularMovies))
+                self.moviesOutput?.getPopularMovies(results: MovieInteraptor().fetchFavoriteds(on: popularMovies))
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
                     self?.changeLoading()
                 }

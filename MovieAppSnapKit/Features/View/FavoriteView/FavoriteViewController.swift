@@ -12,7 +12,7 @@ fileprivate enum ScreenState {
     case favorited
 }
 
-class FavoriteViewController: UIViewController {
+final class FavoriteViewController: UIViewController {
 
     private lazy var titleView: UIView = {
         let view = UIView()
@@ -48,7 +48,12 @@ class FavoriteViewController: UIViewController {
     }()
     
     //MARK: - Empty Situation
-    private lazy var emptyView = UIView()
+    private let emptyView: UIView = {
+        let view = UIView()
+        view.isHidden = true
+        return view
+    }()
+    
     private let emptyEmojiLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
@@ -57,35 +62,23 @@ class FavoriteViewController: UIViewController {
         label.font = Styling.font(fontName: .thonburi, weight: .bold, size: 55)
         return label
     }()
+    
     private let emptyTitleLabel: UILabel = {
         let label = UILabel()
         label.font = Styling.font(fontName: .helvetica, weight: .bold, size: 20)
         label.textColor = Styling.colorForCode(.black)
         label.backgroundColor = .clear
         label.textAlignment = .center
-        label.text = "Sorry,                                There is no favorited movie"
+        label.text = "Sorry, There is no favorited movie"
         label.numberOfLines = 0
         return label
     }()
-    
-    private var screenState: ScreenState? {
-        didSet {
-            if screenState == .empty {
-                favoritedMoviesTableView.isHidden = true
-                emptyView.isHidden = false
-            } else {
-                favoritedMoviesTableView.isHidden = false
-                emptyView.isHidden = true
-            }
-        }
-    }
     
     private var favoritedMovies: [Movie]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        setScreenState()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -96,24 +89,23 @@ class FavoriteViewController: UIViewController {
     //Asks to RealmManager is there any favorited movies
     private func fetchFavoritedMovies() {
         favoritedMovies = RealmManager().fetch()
-        DispatchQueue.main.async {
-            self.favoritedMoviesTableView.reloadData()
-            self.setScreenState()
+        DispatchQueue.main.async { [weak self] in
+            self?.favoritedMoviesTableView.reloadData()
+            self?.setScreenState()
         }
     }
     
     private func setScreenState() {
-        screenState = (favoritedMovies?.isEmpty ?? true) ? .empty : .favorited
+        emptyView.isHidden = (favoritedMovies?.isEmpty ?? true) ? false : true
+        favoritedMoviesTableView.isHidden = (favoritedMovies?.isEmpty ?? true) ? true : false
     }
     
     private func configureUI() {
         self.navigationController?.navigationBar.isHidden = true
         view.backgroundColor = Styling.colorForCode(.moreLighterGray)
         titleView.addSubview(favoriteTitleLabel)
-        containerView.addSubview(emptyView)
-        containerView.addSubview(favoritedMoviesTableView)
-        emptyView.addSubview(emptyEmojiLabel)
-        emptyView.addSubview(emptyTitleLabel)
+        containerView.addSubviews(favoritedMoviesTableView, emptyView)
+        emptyView.addSubviews(emptyEmojiLabel, emptyTitleLabel)
         
         setNavBarComponents()
         setContainerViewConstraints()
@@ -214,6 +206,16 @@ extension FavoriteViewController: UITableViewDelegate, UITableViewDataSource {
             NotificationService.postNotification(name: "isFavorited", object: favoritedMovies?[indexPath.row].isFavorited)
             fetchFavoritedMovies()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = Styling.colorForCode(.moreLighterGray)
+        return view
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 1
     }
 }
 //Tells the favorite vc to dismiss as presentation do not working in viewWillAppear
