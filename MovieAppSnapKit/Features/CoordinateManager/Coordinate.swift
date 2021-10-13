@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 final class Coordinate {
     
@@ -16,6 +17,16 @@ final class Coordinate {
             detailVC.delegate = vc as! DetailVCOutput
             detailVC.modalTransitionStyle = .flipHorizontal
             vc.present(detailVC, animated: true, completion: nil)
+        }
+    }
+    
+    class func goToURL(ID: Int?, and vc: UIViewController) {
+        let selectedCastID = ID ?? 0
+        if let url = URL(string: "\(getURL(on: .castTMDBPage))\(selectedCastID)") {
+            let safariVC = SFSafariViewController(url: url)
+            safariVC.modalPresentationStyle = .popover
+            safariVC.modalTransitionStyle = .crossDissolve
+            vc.present(safariVC, animated: true)
         }
     }
     

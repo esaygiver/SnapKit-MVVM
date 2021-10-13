@@ -48,7 +48,7 @@ class FavoriteViewController: UIViewController {
     }()
     
     //MARK: - Empty Situation
-    private let emptyView = UIView()
+    private lazy var emptyView = UIView()
     private let emptyEmojiLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
@@ -71,11 +71,11 @@ class FavoriteViewController: UIViewController {
     private var screenState: ScreenState? {
         didSet {
             if screenState == .empty {
-                emptyView.isHidden = false
                 favoritedMoviesTableView.isHidden = true
+                emptyView.isHidden = false
             } else {
-                emptyView.isHidden = true
                 favoritedMoviesTableView.isHidden = false
+                emptyView.isHidden = true
             }
         }
     }

@@ -354,13 +354,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        let selectedCastID = castsObject[indexPath.row].id ?? 0
-        if let url = URL(string: "\(getURL(on: .castTMDBPage))\(selectedCastID)") {
-            let safariVC = SFSafariViewController(url: url)
-            safariVC.modalPresentationStyle = .popover
-            safariVC.modalTransitionStyle = .crossDissolve
-            present(safariVC, animated: true)
-        }
+        Coordinate.goToURL(ID: castsObject[indexPath.row].id, and: self)
     }
 }
 //MARK: - UICollectionView FlowLayoutDelegate

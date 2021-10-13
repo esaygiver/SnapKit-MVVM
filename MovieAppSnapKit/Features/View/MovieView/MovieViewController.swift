@@ -20,13 +20,6 @@ protocol MovieViewControllerOutput {
 fileprivate enum ScreenState  {
     case searching
     case loaded
-    case movieEmpty
-    case personEmpty
-}
-
-fileprivate enum SearchScreenState {
-    case upcoming
-    case searchMovieAndCast
 }
 
 final class MovieViewController: UIViewController {
@@ -133,7 +126,7 @@ final class MovieViewController: UIViewController {
     
     private let emptyMovieTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = Styling.font(fontName: .helvetica, weight: .bold, size: 20)
+        label.font = Styling.font(fontName: .helvetica, weight: .regular, size: 20)
         label.textColor = Styling.colorForCode(.black)
         label.backgroundColor = .clear
         label.textAlignment = .center
@@ -160,7 +153,7 @@ final class MovieViewController: UIViewController {
     
     private let emptyPersonTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = Styling.font(fontName: .helvetica, weight: .bold, size: 20)
+        label.font = Styling.font(fontName: .helvetica, weight: .regular, size: 20)
         label.textColor = Styling.colorForCode(.black)
         label.backgroundColor = .clear
         label.textAlignment = .center
@@ -184,20 +177,11 @@ final class MovieViewController: UIViewController {
                 categoryTitleLabel.text = "Popular Movies"
                 popularMoviesCollectionView.isHidden = false
                 searchingView.isHidden = true
-                emptyMovieView.isHidden = true
             case .searching:
                 popularMoviesCollectionView.isHidden = true
                 searchingView.isHidden = false
                 emptyMovieView.isHidden = true
                 emptyPersonView.isHidden = true
-            case .movieEmpty:
-                popularMoviesCollectionView.isHidden = true
-                searchingView.isHidden = false
-                emptyMovieView.isHidden = false
-            case .personEmpty:
-                popularMoviesCollectionView.isHidden = true
-                searchingView.isHidden = false
-                emptyPersonView.isHidden = false
             default:
                 //no-op
                 break
@@ -361,8 +345,8 @@ extension MovieViewController {
         
         searchingView.snp.makeConstraints { (make) in
             make.top.equalTo(categoryTitleLabel.snp.bottom).offset(10)
-            make.right.equalTo(searchBar).offset(-10)
-            make.left.equalTo(searchBar).offset(10)
+            make.right.equalTo(searchBar).offset(-20)
+            make.left.equalTo(searchBar).offset(20)
             make.bottom.equalTo(view.snp.bottom).offset(-100)
         }
         
@@ -450,7 +434,16 @@ extension MovieViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        screenState == .searching ? Coordinate.goToDetailViewController(on: searchedMovies.movie?[indexPath.row], and: self) : Coordinate.goToDetailViewController(on: popularMovies.movie?[indexPath.row], and: self)
+        switch collectionView {
+        case popularMoviesCollectionView:
+            Coordinate.goToDetailViewController(on: popularMovies.movie?[indexPath.row], and: self)
+        case searchedItemsCollectionView:
+            Coordinate.goToDetailViewController(on: searchedMovies.movie?[indexPath.row], and: self)
+        case searchedPersonsCollectionView:
+            Coordinate.goToURL(ID: searchedPersons.person?[indexPath.row].id, and: self)
+        default:
+            break
+        }
     }
 }
 //MARK: - UICollectionView FlowLayoutDelegate
@@ -497,29 +490,29 @@ extension MovieViewController: UICollectionViewDelegateFlowLayout {
 extension MovieViewController: MovieViewControllerOutput {
     
     func saveSearchedItems(results: MovieModel) {
-        self.searchedMovies.movie?.append(contentsOf: results.movie ?? [])
-        self.searchedMovies.totalPage = results.totalPage
-        self.searchedMovies.totalNumber = results.totalNumber
-        screenState = (self.searchedMovies.totalNumber == 0) ? .movieEmpty : .searching
+        searchedMovies.movie?.append(contentsOf: results.movie ?? [])
+        searchedMovies.totalPage = results.totalPage
+        searchedMovies.totalNumber = results.totalNumber
+        emptyMovieView.isHidden = searchedMovies.totalNumber == 0 ? false : true
         DispatchQueue.main.async { [weak self] in
             self?.searchedItemsCollectionView.reloadData()
         }
     }
     
     func savePopularMovies(results: MovieModel) {
-        self.popularMovies.movie?.append(contentsOf: results.movie ?? [])
-        self.popularMovies.totalNumber = results.totalNumber
-        self.popularMovies.totalPage = results.totalPage
+        popularMovies.movie?.append(contentsOf: results.movie ?? [])
+        popularMovies.totalNumber = results.totalNumber
+        popularMovies.totalPage = results.totalPage
         DispatchQueue.main.async { [weak self] in
             self?.popularMoviesCollectionView.reloadData()
         }
     }
     
     func saveSearchedPersons(results: PersonModel) {
-        self.searchedPersons.person?.append(contentsOf: results.person ?? [])
-        self.searchedPersons.totalPage = results.totalPage
-        self.searchedPersons.totalNumber = results.totalNumber
-        screenState = (self.searchedPersons.totalNumber == 0) ? .personEmpty : .searching
+        searchedPersons.person?.append(contentsOf: results.person ?? [])
+        searchedPersons.totalPage = results.totalPage
+        searchedPersons.totalNumber = results.totalNumber
+        emptyPersonView.isHidden = searchedPersons.totalNumber == 0 ? false : true
         DispatchQueue.main.async { [weak self] in
             self?.searchedPersonsCollectionView.reloadData()
         }
