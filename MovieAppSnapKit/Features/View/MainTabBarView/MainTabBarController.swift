@@ -23,9 +23,9 @@ class MainTabBarController: UITabBarController {
             viewControllersWithNavigation.append(UINavigationController(rootViewController: viewController))
         }
         self.viewControllers = viewControllersWithNavigation
-        self.tabBar.items?[0].image = UIImage(named: "firstImage")
-        self.tabBar.items?[0].selectedImage = UIImage(named: "firstImageFill")
-        self.tabBar.items?[1].image = UIImage(named: "iconFavorilerim")
-        self.tabBar.items?[1].selectedImage = UIImage(named: "Favorilerim")
+        self.tabBar.items?[0].image = UIImage(named: K.emptyFirstBarImage)
+        self.tabBar.items?[0].selectedImage = UIImage(named: K.fillFirstBarImage)
+        self.tabBar.items?[1].image = UIImage(named: K.emptyFavoriteBarImage)
+        self.tabBar.items?[1].selectedImage = UIImage(named: K.fillFavoriteBarImage)
     }
 }

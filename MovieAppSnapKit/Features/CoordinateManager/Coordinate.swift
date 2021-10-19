@@ -14,7 +14,9 @@ final class Coordinate {
         if let object = object {
             let detailVC = DetailViewController()
             detailVC.movieObject = object
-            detailVC.delegate = vc as! DetailVCOutput
+            if let vc = vc as? DetailVCOutput {
+                detailVC.delegate = vc
+            }
             detailVC.modalTransitionStyle = .flipHorizontal
             vc.present(detailVC, animated: true, completion: nil)
         }

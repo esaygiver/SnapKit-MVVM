@@ -7,11 +7,6 @@
 
 import UIKit
 
-fileprivate enum ScreenState {
-    case empty
-    case favorited
-}
-
 final class FavoriteViewController: UIViewController {
 
     private lazy var titleView: UIView = {
@@ -23,7 +18,7 @@ final class FavoriteViewController: UIViewController {
     
     private let favoriteTitleLabel: UILabel = {
         var label = UILabel()
-        label.text = "Favorites"
+        label.text = K.favoritePageTitle
         label.textAlignment = .center
         label.font = Styling.font(fontName: .thonburi, weight: .bold, size: 30)
         label.textColor = .black
@@ -69,7 +64,7 @@ final class FavoriteViewController: UIViewController {
         label.textColor = Styling.colorForCode(.black)
         label.backgroundColor = .clear
         label.textAlignment = .center
-        label.text = "Sorry, There is no favorited movie"
+        label.text = K.noFavoritedMovie
         label.numberOfLines = 0
         return label
     }()
@@ -86,7 +81,7 @@ final class FavoriteViewController: UIViewController {
         fetchFavoritedMovies()
     }
     
-    //Asks to RealmManager is there any favorited movies
+    // Asks to RealmManager is there any favorited movies
     private func fetchFavoritedMovies() {
         favoritedMovies = RealmManager().fetch()
         DispatchQueue.main.async { [weak self] in
@@ -174,7 +169,7 @@ extension FavoriteViewController {
 //MARK: - UITableView Delegate and Datasource
 extension FavoriteViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return favoritedMovies?.count ?? 0
+        favoritedMovies?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -191,11 +186,11 @@ extension FavoriteViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200
+        K.tableViewHeightForRow
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        true
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -215,7 +210,7 @@ extension FavoriteViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 1
+        1
     }
 }
 //Tells the favorite vc to dismiss as presentation do not working in viewWillAppear
