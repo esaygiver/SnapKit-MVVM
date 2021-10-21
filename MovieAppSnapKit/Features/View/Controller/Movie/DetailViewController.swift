@@ -107,7 +107,6 @@ class DetailViewController: UIViewController {
         button.clipsToBounds = true
         button.layer.borderWidth = 1.2
         button.layer.borderColor = UIColor.red.cgColor
-        button.setImage(UIImage(named: "Shape"), for: .normal)
         button.addTarget(self, action: #selector(favoriteButtonPressed), for: .touchUpInside)
         view.addSubview(button)
         return button
@@ -137,9 +136,10 @@ class DetailViewController: UIViewController {
         return collectionView
     }()
     
+    //like animation
     private let likeView: UIImageView = {
         let img = UIImageView()
-        img.image = UIImage(named: "Favori")
+        img.image = UIImage(named: K.favorited)
         img.contentMode = .scaleAspectFit
         return img
     }()
@@ -151,12 +151,15 @@ class DetailViewController: UIViewController {
     private lazy var viewModel = DetailViewModel()
     var isMovieFavorited: Bool = false {
         didSet {
-            isMovieFavorited ? favoriteButton.setImage(UIImage(named: K.favorited), for: .normal) : favoriteButton.setImage(UIImage(named: K.notFavorited), for: .normal)
+            isMovieFavorited ?
+                favoriteButton.setImage(UIImage(named: K.favorited), for: .normal) :
+                favoriteButton.setImage(UIImage(named: K.notFavorited), for: .normal)
         }
     }
     var isTrailerTapped: Bool = false {
         didSet {
-            isTrailerTapped ? trailerButton.setImage(UIImage(named: K.pause), for: .normal) :
+            isTrailerTapped ?
+                trailerButton.setImage(UIImage(named: K.pause), for: .normal) :
                 trailerButton.setImage(UIImage(named: K.play), for: .normal)
         }
     }
@@ -165,8 +168,6 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         viewModel.setDelegates(output: self)
-        let webConfiguration = WKWebViewConfiguration()
-        webConfiguration.allowsInlineMediaPlayback = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -221,18 +222,7 @@ class DetailViewController: UIViewController {
     }
     
     @objc private func favoriteButtonPressed() {
-        isMovieFavorited.toggle()
-        view.addSubviews(likeView)
-        if isMovieFavorited {
-            movieObject?.isFavorited = true
-            RealmManager().save(on: movieObject)
-            Animate.addAnimation(on: likeView, and: self)
-        } else {
-            movieObject?.isFavorited = false
-            RealmManager().delete(movieObject: movieObject)
-            likeView.removeFromSuperview()
-        }
-        NotificationService.postNotification(name: K.favoritedNotification, object: movieObject?.isFavorited)
+        favoriteButton.action(favStatus: &isMovieFavorited, movieObject: &movieObject, vc: self, on: view, likeView: likeView)
     }
     
     private func configureUI() {
@@ -240,7 +230,6 @@ class DetailViewController: UIViewController {
         view.addSubview(containerView)
         containerView.addSubviews(movieImageView, trailerView, trailerButton, movieTitle, movieRateLabel, movieOverview, movieReleaseDate, favoriteButton, castCollectionView, castTitle)
         setContainerViewComponentsConstraints()
-        setFavoriteButtonConstraints()
         setFavButtonUI()
     }
 }
@@ -263,7 +252,7 @@ extension DetailViewController {
             make.top.equalTo(containerView.snp.top).offset(30)
             make.left.equalTo(containerView.snp.left).offset(10)
             make.right.equalTo(containerView.snp.right).offset(-10)
-            make.height.equalTo(175)
+            make.height.equalTo(170)
         }
         
         trailerButton.snp.makeConstraints { make in
@@ -319,11 +308,9 @@ extension DetailViewController {
             make.top.equalTo(castTitle.snp.bottom).offset(10)
             make.height.equalTo(200)
         }
-    }
-    
-    func setFavoriteButtonConstraints() {
+        
         favoriteButton.snp.makeConstraints { make in
-            make.bottom.equalTo(view.snp.bottom).offset(-60)
+            make.bottom.equalTo(containerView.snp.bottom).offset(-60)
             make.right.equalToSuperview().offset(-50)
             make.height.width.equalTo(80)
         }

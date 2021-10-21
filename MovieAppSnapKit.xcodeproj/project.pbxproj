@@ -14,6 +14,7 @@
 		8469AE902714670B00E94CB4 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8469AE8F2714670B00E94CB4 /* WebKit.framework */; };
 		8469AE932714909C00E94CB4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8469AE922714909C00E94CB4 /* NotificationService.swift */; };
 		8469AEBE271579DB00E94CB4 /* MovieInteraptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8469AEBD271579DB00E94CB4 /* MovieInteraptor.swift */; };
+		849702FB271EE6580098F99C /* UIButton + Favorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849702FA271EE6580098F99C /* UIButton + Favorite.swift */; };
 		849E3C0B2705AAAD007EACAF /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 849E3C0A2705AAAD007EACAF /* Kingfisher */; };
 		849E3C0F2705AAD9007EACAF /* UIImageView + Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E3C0E2705AAD9007EACAF /* UIImageView + Kingfisher.swift */; };
 		84B15F29270890820046FE35 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B15F28270890810046FE35 /* MainTabBarController.swift */; };
@@ -80,6 +81,7 @@
 		8469AE8F2714670B00E94CB4 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		8469AE922714909C00E94CB4 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		8469AEBD271579DB00E94CB4 /* MovieInteraptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieInteraptor.swift; sourceTree = "<group>"; };
+		849702FA271EE6580098F99C /* UIButton + Favorite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + Favorite.swift"; sourceTree = "<group>"; };
 		849E3C0E2705AAD9007EACAF /* UIImageView + Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + Kingfisher.swift"; sourceTree = "<group>"; };
 		84B15F28270890810046FE35 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		84B15F2F2708912C0046FE35 /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 				84D45E2C27062D4D0074DC81 /* UISearchBar.swift */,
 				84D7678A270F00820042615F /* UIView.swift */,
 				84FF49DF271CC94600594705 /* String + Localizable.swift */,
+				849702FA271EE6580098F99C /* UIButton + Favorite.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -510,6 +513,7 @@
 				84B15F29270890820046FE35 /* MainTabBarController.swift in Sources */,
 				84B15F332709A9CC0046FE35 /* FavoritedMovieTableViewCell.swift in Sources */,
 				846845D427050EFC00976E9D /* Keys.swift in Sources */,
+				849702FB271EE6580098F99C /* UIButton + Favorite.swift in Sources */,
 				84D9E83F270C92DD00FA916C /* PersonModel.swift in Sources */,
 				84FD1FC9270440A800B4CDD9 /* ViewController.swift in Sources */,
 				84C8C180270512A50091F47A /* Movie.swift in Sources */,
