@@ -198,7 +198,7 @@ extension FavoriteViewController: UITableViewDelegate, UITableViewDataSource {
             favoritedMovies?[indexPath.row].isFavorited = false
             RealmManager().delete(movieObject: favoritedMovies?[indexPath.row])
             NotificationService.setBadgeValue(on: self)
-            NotificationService.postNotification(name: "isFavorited", object: favoritedMovies?[indexPath.row].isFavorited)
+            NotificationService.postNotification(name: K.favoritedNotification, object: favoritedMovies?[indexPath.row].isFavorited)
             fetchFavoritedMovies()
         }
     }
