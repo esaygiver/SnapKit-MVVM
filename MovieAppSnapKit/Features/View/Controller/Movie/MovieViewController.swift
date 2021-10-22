@@ -95,7 +95,7 @@ final class MovieViewController: UIViewController {
     
     private let appTitle: UILabel = {
         var label = UILabel()
-        label.text = "MovieDB"
+        label.text = K.movieDBTitle
         label.textAlignment = .center
         label.font = Styling.font(fontName: .thonburi, weight: .bold, size: 30)
         label.textColor = .black
@@ -214,15 +214,21 @@ final class MovieViewController: UIViewController {
     }
     
     private func checkMovieDataChanged() {
-        NotificationCenter.default.addObserver(forName: Notification.Name("isFavorited"), object: nil, queue: .main) { [weak self] notification in
+        NotificationCenter.default.addObserver(forName: Notification.Name(K.favoritedNotification), object: nil, queue: .main) { [weak self] notification in
             self?.isFetchingNecessary(notification)
         }
     }
-    
+
     @objc func isFetchingNecessary(_ newObject: Notification) {
-        if let isFavorited = newObject.object as? Bool, !isFavorited {
-            popularMovies.movie = []
-            fetchPopularMovies()
+        if let favMovie = newObject.object as? FavoritedMovie {
+            popularMovies.movie?.forEach({ popMovie in
+                if popMovie.id == favMovie.id {
+                    popMovie.isFavorited = favMovie.isFavorited
+                }
+            })
+            DispatchQueue.main.async { [weak self] in
+                self?.popularMoviesCollectionView.reloadData()
+            }
         }
     }
     
@@ -517,7 +523,6 @@ extension MovieViewController: MovieViewControllerOutput {
         }
     }
  
-    
     func changeLoading(isLoad: Bool) {
         if isLoad {
             UIView.animate(withDuration: 1) {

@@ -28,9 +28,10 @@ struct K {
     //MARK: - UI Ks
     static let favorited = "Favori"
     static let notFavorited = "Shape"
-    static let play = "Play"
+    static let play = "play"
     static let pause = "pause-button"
     static let favoritedNotification = "isFavorited"
+    static let movieDBTitle = "MovieDB"
     static let favoritePageTitle = "Favorites"
     static let noMovieResults = "Sorry, There are no movies about your search"
     static let noCastResults = "Sorry, There is no cast about your search"
@@ -41,4 +42,5 @@ struct K {
     static let castResults = "Cast Results"
     static let overview = "Overview"
     static let cast = "Cast"
+    static let emptyUrlArray = ["https://image.tmdb.org/t/p/w500", "https://image.tmdb.org/t/p/original"]
 }
